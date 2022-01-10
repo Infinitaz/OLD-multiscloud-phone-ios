@@ -830,7 +830,7 @@ static RootViewManager *rootViewManagerInstance = nil;
 	}
     
     if (!linphone_core_is_network_reachable(LC)) {
-		[PhoneMainView.instance presentViewController:[LinphoneUtils networkErrorView:@"send a message"] animated:YES completion:nil];
+        [PhoneMainView.instance presentViewController:[LinphoneUtils networkErrorView] animated:YES completion:nil];
         return;
     }
     
@@ -884,10 +884,7 @@ static RootViewManager *rootViewManagerInstance = nil;
 	LinphoneChatRoomParams *param = linphone_core_create_default_chat_room_params(LC);
 	linphone_chat_room_params_enable_group(param, isGroup);
 	linphone_chat_room_params_enable_encryption(param, isEncrypted);
-	linphone_chat_room_params_set_ephemeral_mode(param,[LinphoneManager.instance lpConfigBoolForKey:@"ephemeral_chat_messages_settings_per_device" withDefault:true] ?
-													LinphoneChatRoomEphemeralModeDeviceManaged :
-													LinphoneChatRoomEphemeralModeAdminManaged);
-	linphone_chat_room_params_set_ephemeral_lifetime(param,0);	
+	
 	LinphoneChatRoom *room = linphone_core_create_chat_room_2(LC, param, subject ?: LINPHONE_DUMMY_SUBJECT, addresses);
 	
     if (!room) {
@@ -958,17 +955,6 @@ void main_view_chat_room_state_changed(LinphoneChatRoom *cr, LinphoneChatRoomSta
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
     [controller dismissModalViewControllerAnimated:YES];
-}
-
-#pragma mark - Light/Dark mode
-
--(BOOL) darkMode {
-	if (@available(iOS 13.0, *)) {
-		UITraitCollection *collection = [UITraitCollection currentTraitCollection];
-		return collection.userInterfaceStyle == UIUserInterfaceStyleDark;
-	} else {
-		return false;
-	}
 }
 
 @end

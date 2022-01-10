@@ -121,7 +121,6 @@
 
 - (BOOL)isIphoneXDevice;
 + (int)iphoneStatusBarHeight;
--(BOOL) darkMode;
 
 @end
 

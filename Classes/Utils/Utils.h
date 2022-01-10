@@ -39,7 +39,7 @@
 + (UIImage *)resizeImage:(UIImage *)imageToResize newSize:(CGSize)newSize;
 
 + (LinphoneAddress *)normalizeSipOrPhoneAddress:(NSString *)addr;
-+ (UIAlertController *)networkErrorView:(NSString *)action;
++ (UIAlertController *)networkErrorView;
 
 typedef enum {
 	LinphoneDateHistoryList,
@@ -71,13 +71,6 @@ typedef enum {
 @interface UIImage (systemIcons)
 
 + (UIImage *)imageFromSystemBarButton:(UIBarButtonSystemItem)systemItem :(UIColor *) color;
-
-@end
-
-@interface UIImageView (ImageWithTint)
-
-- (void)setImageNamed:(NSString *)name tintColor:(UIColor *)color;
-- (void)setImageNamed:(NSString *)name tintColorLetter:(NSString *)letter;
 
 @end
 
@@ -117,8 +110,6 @@ typedef enum {
 - (UIColor *)lighterColor;
 
 - (UIColor *)darkerColor;
-
-+(UIColor *)color:(NSString *)letter;
 
 @end
 

@@ -148,7 +148,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 	[self hideRoutes:TRUE animated:FALSE];
 	[self hideOptions:TRUE animated:FALSE];
 	[self hidePad:TRUE animated:FALSE];
-	[self hideSpeaker:LinphoneManager.instance.bluetoothAvailable];
+	[self hideSpeaker: [CallManager.instance isBluetoothAvailable]];
 	[self callDurationUpdate];
 	[self onCurrentCallChange];
 	// Set windows (warn memory leaks)
@@ -683,8 +683,9 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 #pragma mark - ActionSheet Functions
 
 - (void)displayAskToEnableVideoCall:(LinphoneCall *)call {
-	
-	if (CallManager.instance.inVideoConf) { // we are hosting a video conf, so just accept people wanting to activate video.
+	if (linphone_call_params_get_local_conference_mode(linphone_call_get_current_params(call))) {
+		return;
+	} else if (CallManager.instance.inVideoConf) {
 		LinphoneCallParams *params = linphone_core_create_call_params(LC, call);
 		linphone_call_params_enable_video(params, TRUE);
 		linphone_call_accept_update(call, params);

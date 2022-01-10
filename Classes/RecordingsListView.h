@@ -40,7 +40,6 @@ typedef enum _RecordingSelectionMode { RecordingSelectionModeNone, RecordingSele
 @property(weak, nonatomic) IBOutlet UIButton *deleteButton;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIInterfaceStyleButton *toggleSelectionButton;
-@property (weak, nonatomic) IBOutlet UIView *videoView;
 
 - (IBAction)onDeleteClick:(id)sender;
 - (IBAction)onEditionChangeClick:(id)sender;

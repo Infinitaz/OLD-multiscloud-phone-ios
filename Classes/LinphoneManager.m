@@ -75,8 +75,6 @@ NSString *const kLinphoneFileTransferRecvUpdate = @"LinphoneFileTransferRecvUpda
 NSString *const kLinphoneQRCodeFound = @"LinphoneQRCodeFound";
 NSString *const kLinphoneChatCreateViewChange = @"LinphoneChatCreateViewChange";
 NSString *const kLinphoneEphemeralMessageDeletedInRoom = @"LinphoneEphemeralMessageDeletedInRoom";
-NSString *const kLinphoneVoiceMessagePlayerEOF = @"LinphoneVoiceMessagePlayerEOF";
-NSString *const kLinphoneVoiceMessagePlayerLostFocus = @"LinphoneVoiceMessagePlayerLostFocus";
 NSString *const kLinphoneConfStateChanged = @"kLinphoneConfStateChanged";
 NSString *const kLinphoneConfStateParticipantListChanged = @"kLinphoneConfStateParticipantListChanged";
 
@@ -233,10 +231,6 @@ struct codec_name_pref_table codec_pref_table[] = {{"speex", 8000, "speex_8k_pre
 
 - (id)init {
 	if ((self = [super init])) {
-		[NSNotificationCenter.defaultCenter addObserver:self
-		 selector:@selector(audioRouteChangeListenerCallback:)
-		 name:AVAudioSessionRouteChangeNotification
-		 object:nil];
 
 		NSString *path = [[NSBundle mainBundle] pathForResource:@"msg" ofType:@"wav"];
 		self.messagePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:path] error:nil];
@@ -255,9 +249,6 @@ struct codec_name_pref_table codec_pref_table[] = {{"speex", 8000, "speex_8k_pre
 		[self renameDefaultSettings];
 		[self copyDefaultSettings];
 		[self overrideDefaultSettings];
-		if (![self lpConfigBoolForKey:@"migration_images_done" withDefault:FALSE]) {
-			[self migrationAllImages];
-		}
 
         [self lpConfigSetString:[LinphoneManager dataFile:@"linphone.db"] forKey:@"uri" inSection:@"storage"];
         [self lpConfigSetString:[LinphoneManager dataFile:@"x3dh.c25519.sqlite3"] forKey:@"x3dh_db_path" inSection:@"lime"];
@@ -1305,7 +1296,11 @@ void popup_link_account_cb(LinphoneAccountCreator *creator, LinphoneAccountCreat
 	}
 }
 
-- (void)configurePushProviderForAccounts {
+- (void)startLinphoneCore {
+	bool corePushEnabled = [self lpConfigIntForKey:@"proxy" inSection:@"push_notification_allowed"];
+	linphone_core_set_push_notification_enabled([LinphoneManager getLc], corePushEnabled);
+	linphone_core_start([LinphoneManager getLc]);
+	
 	const MSList *accountsList = linphone_core_get_account_list(theLinphoneCore);
 	while (accountsList) {
 		LinphoneAccount * account = accountsList->data;
@@ -1326,14 +1321,6 @@ void popup_link_account_cb(LinphoneAccountCreator *creator, LinphoneAccountCreat
 		linphone_account_params_unref(accountParams);
 		accountsList = accountsList->next;
 	}
-}
-
-- (void)startLinphoneCore {
-	bool corePushEnabled = [self lpConfigIntForKey:@"net" inSection:@"push_notification"];
-	linphone_core_set_push_notification_enabled([LinphoneManager getLc], corePushEnabled);
-	linphone_core_start([LinphoneManager getLc]);
-	
-	[self configurePushProviderForAccounts];
 }
 
 - (void)createLinphoneCore {
@@ -1412,7 +1399,7 @@ void popup_link_account_cb(LinphoneAccountCreator *creator, LinphoneAccountCreat
 
 	/* Use the rootca from framework, which is already set*/
 	//linphone_core_set_root_ca(theLinphoneCore, [LinphoneManager bundleFile:@"rootca.pem"].UTF8String);
-	linphone_core_set_user_certificates_path(theLinphoneCore, linphone_factory_get_data_dir(linphone_factory_get(), kLinphoneMsgNotificationAppGroupId.UTF8String));
+	linphone_core_set_user_certificates_path(theLinphoneCore, [LinphoneManager cacheDirectory].UTF8String);
 
 	/* The core will call the linphone_iphone_configuring_status_changed callback when the remote provisioning is loaded
 	   (or skipped).
@@ -1446,13 +1433,6 @@ void popup_link_account_cb(LinphoneAccountCreator *creator, LinphoneAccountCreat
 		linphone_core_destroy(theLinphoneCore);
 		LOGI(@"Destroy linphonecore %p", theLinphoneCore);
 		theLinphoneCore = nil;
-
-		// Post event
-		NSDictionary *dict =
-			[NSDictionary dictionaryWithObject:[NSValue valueWithPointer:theLinphoneCore] forKey:@"core"];
-		[NSNotificationCenter.defaultCenter postNotificationName:kLinphoneCoreUpdate
-		 object:LinphoneManager.instance
-		 userInfo:dict];
 	}
 	libStarted = FALSE;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -1680,17 +1660,6 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 	linphone_core_refresh_registers(theLinphoneCore); // just to make sure REGISTRATION is up to date
 }
 
-- (void)migrationAllImages {
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSArray *images = [fileManager contentsOfDirectoryAtPath:[LinphoneManager cacheDirectory] error:NULL];
-
-	for (NSString *image in images)
-	{
-		[fileManager copyItemAtPath:[[LinphoneManager cacheDirectory] stringByAppendingPathComponent:image] toPath:[[LinphoneManager imagesDirectory] stringByAppendingPathComponent:image] error:nil];
-	}
-	[self lpConfigSetBool:TRUE forKey:@"migration_images_done"];
-}
-
 - (void)migrateImportantFiles {
 	if ([LinphoneManager copyFile:[LinphoneManager oldPreferenceFile:@"linphonerc"] destination:[LinphoneManager preferenceFile:@"linphonerc"] override:TRUE ignore:TRUE]) {
 		[NSFileManager.defaultManager
@@ -1769,21 +1738,8 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 }
 #pragma mark - Audio route Functions
 
-- (void)audioRouteChangeListenerCallback:(NSNotification *)notif {
-	if (IPAD)
-		return;
-	
-	_bluetoothAvailable = [CallManager.instance isBluetoothAvailable];
-	
-	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:_bluetoothAvailable], @"available", nil];
-	[NSNotificationCenter.defaultCenter postNotificationName:kLinphoneBluetoothAvailabilityUpdate
-	 object:self
-	 userInfo:dict];
-	
-}
-
 #pragma mark - Call Functions
-- (void)send:(NSString *)replyText toChatRoom:(LinphoneChatRoom *)room {
+- (void)send:(NSString *)replyText toChatRoom:(LinphoneChatRoom *)room {	
 	LinphoneChatMessage *msg = linphone_chat_room_create_message(room, replyText.UTF8String);
 	linphone_chat_message_send(msg);
 
@@ -1807,7 +1763,6 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 		return;
 	
 	if (linphone_core_local_permission_enabled(LC)) return;
-	
 
 	if (![defaults boolForKey: alertSuppressionKey]) {
 		UIAlertController *noticeView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Local network usage", nil)
@@ -1832,7 +1787,7 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 - (void)call:(const LinphoneAddress *)iaddr {
 	// First verify that network is available, abort otherwise.
 	if (!linphone_core_is_network_reachable(theLinphoneCore)) {
-		[PhoneMainView.instance presentViewController:[LinphoneUtils networkErrorView:@"place a call"] animated:YES completion:nil];
+		[PhoneMainView.instance presentViewController:[LinphoneUtils networkErrorView] animated:YES completion:nil];
 		return;
 	}
 
@@ -1907,45 +1862,28 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 	return [fullPath stringByAppendingPathComponent:file];
 }
 
-+ (NSString *)imagesDirectory {
-	NSURL *basePath = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:kLinphoneMsgNotificationAppGroupId];
-	NSString *fullPath = [[basePath path] stringByAppendingString:@"/Library/Images/"];
-	if (![[NSFileManager defaultManager] fileExistsAtPath:fullPath]) {
-		NSError *error;
-		LOGW(@"Download path %@ does not exist, creating it.", fullPath);
-		if (![[NSFileManager defaultManager] createDirectoryAtPath:fullPath
-									   withIntermediateDirectories:YES
-														attributes:nil
-															 error:&error]) {
-			LOGE(@"Create download path directory error: %@", error.description);
-		}
-	}
-	return fullPath;
-}
-
 + (NSString *)cacheDirectory {
-	NSURL *basePath = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:kLinphoneMsgNotificationAppGroupId];
-	NSString *fullPath = [[basePath path] stringByAppendingString:@"/Library/Caches/"];
-	if (![[NSFileManager defaultManager] fileExistsAtPath:fullPath]) {
-		NSError *error;
-		LOGW(@"Download path %@ does not exist, creating it.", fullPath);
-		if (![[NSFileManager defaultManager] createDirectoryAtPath:fullPath
-									   withIntermediateDirectories:YES
-														attributes:nil
-															 error:&error]) {
-			LOGE(@"Create download path directory error: %@", error.description);
-		}
-	}
+	LinphoneFactory *factory = linphone_factory_get();
+	NSString *fullPath = [NSString stringWithUTF8String:linphone_factory_get_download_dir(factory, kLinphoneMsgNotificationAppGroupId.UTF8String)];
 	return fullPath;
 }
 
-+ (NSString *)validFilePath:(NSString *)name {
-	NSString *filePath = [[LinphoneManager imagesDirectory] stringByAppendingPathComponent:name];
++ (NSString *)getValidFile:(NSString *)name {
+	// At present, downlaod_dir is .../Library/Images, but during sometimes download_dir was .../Library/Caches
+	NSString *filePath = [[LinphoneManager cacheDirectory] stringByAppendingPathComponent:name];
 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
 		return filePath;
 	}
-	// if migration (move files of cacheDirectory to imagesDirectory) failed
-	return [[LinphoneManager cacheDirectory] stringByAppendingPathComponent:name];
+
+	NSString *objcGroupdId = [NSString stringWithCString:kLinphoneMsgNotificationAppGroupId.UTF8String encoding:[NSString defaultCStringEncoding]];
+	NSURL *basePath = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:objcGroupdId];
+	NSString * fullPath = [[basePath path] stringByAppendingString:@"/Library/Caches/"];
+	fullPath = [fullPath stringByAppendingPathComponent:name];
+	if ([[NSFileManager defaultManager] fileExistsAtPath:fullPath]) {
+		[[NSFileManager defaultManager] copyItemAtPath:fullPath toPath:filePath error:nil];
+	}
+
+	return fullPath;
 }
 
 + (NSString *)oldPreferenceFile:(NSString *)file {
@@ -2277,7 +2215,10 @@ void conference_device_changed(LinphoneConference *conference, const LinphonePar
 void linphone_iphone_conference_state_changed(LinphoneCore *lc, LinphoneConference *conf,LinphoneConferenceState state) {
 	
 	if (state == LinphoneConferenceStateCreated) {
-		LinphoneConferenceCbs * cbs = linphone_factory_create_conference_cbs(linphone_factory_get());
+		LinphoneConferenceCbs * cbs = linphone_conference_get_current_callbacks(conf);
+		if (!cbs) {
+			cbs = linphone_factory_create_conference_cbs(linphone_factory_get());
+		}
 		linphone_conference_cbs_set_participant_added(cbs, conference_participant_changed);
 		linphone_conference_cbs_set_participant_device_added(cbs, conference_device_changed);
 		linphone_conference_cbs_set_participant_device_removed(cbs, conference_device_changed);

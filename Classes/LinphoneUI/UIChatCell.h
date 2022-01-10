@@ -38,8 +38,6 @@
 @property(weak, nonatomic) IBOutlet UILabel *unreadCountLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imdmIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *ephemeral;
-@property (weak, nonatomic) IBOutlet UIImageView *forwardIcon;
-
 
 - (id)initWithIdentifier:(NSString*)identifier;
 

@@ -60,8 +60,6 @@ extern NSString *const kLinphoneFileTransferRecvUpdate;
 extern NSString *const kLinphoneQRCodeFound;
 extern NSString *const kLinphoneChatCreateViewChange;
 extern NSString *const kLinphoneEphemeralMessageDeletedInRoom;
-extern NSString *const kLinphoneVoiceMessagePlayerEOF;
-extern NSString *const kLinphoneVoiceMessagePlayerLostFocus;
 extern NSString *const kLinphoneConfStateParticipantListChanged;
 extern NSString *const kLinphoneConfStateChanged;
 
@@ -113,7 +111,6 @@ typedef struct _LinphoneManagerSounds {
 + (NSString *)getUserAgent;
 + (int)unreadMessageCount;
 
-- (void)configurePushProviderForAccounts;
 - (void)playMessageSound;
 - (void)resetLinphoneCore;
 - (void)launchLinphoneCore;
@@ -138,8 +135,7 @@ typedef struct _LinphoneManagerSounds {
 + (NSString *)documentFile:(NSString *)file;
 + (NSString*)dataFile:(NSString*)file;
 + (NSString*)cacheDirectory;
-+ (NSString *)imagesDirectory;
-+ (NSString *)validFilePath:(NSString *)name;
++ (NSString *)getValidFile:(NSString *)name;
 // migration
 + (NSString *)oldPreferenceFile:(NSString *)file;
 + (NSString *)oldDataFile:(NSString *)file;
@@ -204,7 +200,6 @@ typedef struct _LinphoneManagerSounds {
 @property (readonly) sqlite3* database;
 @property (readonly) LinphoneManagerSounds sounds;
 @property (readonly) NSMutableArray *logs;
-@property (nonatomic, assign) BOOL bluetoothAvailable;
 @property (readonly) NSString* contactSipField;
 @property (readonly,copy) NSString* contactFilter;
 @property (copy) void (^silentPushCompletion)(UIBackgroundFetchResult);

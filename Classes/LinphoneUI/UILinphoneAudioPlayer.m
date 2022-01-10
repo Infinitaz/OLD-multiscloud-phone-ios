@@ -19,7 +19,6 @@
 
 #import "UILinphoneAudioPlayer.h"
 #import "Utils.h"
-#import "PhoneMainView.h"
 
 @implementation UILinphoneAudioPlayer {
     @private
@@ -41,7 +40,7 @@
 
 - (instancetype)initWithFilePath:(NSString *)filePath {
     if (self = [super initWithNibName:NSStringFromClass(self.class) bundle:[NSBundle mainBundle]]) {
-        player = linphone_core_create_local_player(LC, NULL, "IOSDisplay", NULL);
+        player = linphone_core_create_local_player(LC, NULL, NULL, NULL);
         cbs = linphone_player_get_callbacks(player);
         linphone_player_set_user_data(player, (__bridge void *)self);
         linphone_player_cbs_set_eof_reached(cbs, on_eof_reached);
@@ -92,12 +91,6 @@
     [_playButton setImage:[UIImage imageFromSystemBarButton:UIBarButtonSystemItemPlay:[UIColor blackColor]] forState:UIControlStateNormal];
     [_stopButton setTitle:@"" forState:UIControlStateNormal];
     [_stopButton setImage:[UIImage imageFromSystemBarButton:UIBarButtonSystemItemRefresh:[UIColor blackColor]] forState:UIControlStateNormal];
-	if (linphone_player_get_is_video_available(player)) {
-		linphone_player_set_window_id(player, (__bridge void *)VIEW(RecordingsListView).videoView);
-		VIEW(RecordingsListView).videoView.hidden = NO;
-	} else {
-		VIEW(RecordingsListView).videoView.hidden = YES;
-	}
 }
 
 - (BOOL)isOpened {
@@ -123,7 +116,6 @@ void on_eof_reached(LinphonePlayer *pl) {
         [player.playButton setImage:[UIImage imageFromSystemBarButton:UIBarButtonSystemItemPlay:[UIColor blackColor]] forState:UIControlStateNormal];
     });
     player->eofReached = YES;
-	VIEW(RecordingsListView).videoView.hidden = YES;
 }
 
 #pragma mark - ViewController methods
