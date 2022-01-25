@@ -4913,7 +4913,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMPRESS_PNG_FILES = NO;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -4949,7 +4949,7 @@
 					"-DENABLE_QRCODE=TRUE",
 					"-DENABLE_SMS_INVITE=TRUE",
 					"$(inherited)",
-					"-DLINPHONE_SDK_VERSION=\\\"5.0.33-pre.2+607391a\\\"",
+					"-DLINPHONE_SDK_VERSION=\\\"5.1.0-alpha.89+e58e96f\\\"",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.infinitaz.multiscloudphone;
@@ -5039,7 +5039,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMPRESS_PNG_FILES = NO;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5072,7 +5072,7 @@
 					"-DENABLE_QRCODE=TRUE",
 					"-DENABLE_SMS_INVITE=TRUE",
 					"$(inherited)",
-					"-DLINPHONE_SDK_VERSION=\\\"5.0.33-pre.2+607391a\\\"",
+					"-DLINPHONE_SDK_VERSION=\\\"5.1.0-alpha.89+e58e96f\\\"",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.infinitaz.multiscloudphone;
@@ -5161,7 +5161,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMPRESS_PNG_FILES = NO;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5194,7 +5194,7 @@
 					"-DENABLE_QRCODE=TRUE",
 					"-DENABLE_SMS_INVITE=TRUE",
 					"$(inherited)",
-					"-DLINPHONE_SDK_VERSION=\\\"5.0.33-pre.2+607391a\\\"",
+					"-DLINPHONE_SDK_VERSION=\\\"5.1.0-alpha.89+e58e96f\\\"",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.infinitaz.multiscloudphone;
@@ -5282,7 +5282,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMPRESS_PNG_FILES = NO;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5315,7 +5315,7 @@
 					"-DENABLE_QRCODE=TRUE",
 					"-DENABLE_SMS_INVITE=TRUE",
 					"$(inherited)",
-					"-DLINPHONE_SDK_VERSION=\\\"5.0.33-pre.2+607391a\\\"",
+					"-DLINPHONE_SDK_VERSION=\\\"5.1.0-alpha.89+e58e96f\\\"",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.infinitaz.multiscloudphone;
@@ -5356,7 +5356,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5399,7 +5399,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5441,7 +5441,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5484,7 +5484,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5578,7 +5578,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5634,7 +5634,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5686,7 +5686,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5738,7 +5738,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5790,7 +5790,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5846,7 +5846,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5898,7 +5898,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
@@ -5950,7 +5950,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = B32XL97M7D;
 				ENABLE_BITCODE = NO;
