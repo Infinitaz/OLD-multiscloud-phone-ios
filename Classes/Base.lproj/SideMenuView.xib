@@ -76,9 +76,6 @@
                             </subviews>
                             <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                             <gestureRecognizers/>
-                            <connections>
-                                <outletCollection property="gestureRecognizers" destination="1kD-az-BAx" appends="YES" id="OGc-fj-HQy"/>
-                            </connections>
                         </view>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ttt-1k-jAm">
                             <rect key="frame" x="0.0" y="100" width="300" height="754"/>
