@@ -1393,7 +1393,7 @@ void assistant_is_account_linked(LinphoneAccountCreator *creator, LinphoneAccoun
             nextView = _configureView;
             [self loadAssistantConfig:@"assistant_external_sip.rc"];
             
-            [self findTextField:ViewElement_Domain].text = domain;
+            [self findTextField:ViewElement_Domain].text = [domain stringByReplacingOccurrencesOfString:@".pbx.multiscloud.com" withString:@""];
             [self findTextField:ViewElement_Username].text = name;
             
         } else {
