@@ -56,8 +56,14 @@ static UICompositeViewDescription *compositeDescription = nil;
 	UITapGestureRecognizer *tapGestureRecognizer =
 		[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onLicenceTap)];
 	tapGestureRecognizer.numberOfTapsRequired = 1;
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy"];
+    NSString *yearString = [formatter stringFromDate:[NSDate date]];
+    _licenceLabel.text = [NSString stringWithFormat:@"© 2017-%@ Multis Cloud, LLC",yearString];
 	[_licenceLabel addGestureRecognizer:tapGestureRecognizer];
 	_licenceLabel.userInteractionEnabled = YES;
+    
 	UITapGestureRecognizer *tapGestureRecognizerPolicy =
 		[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onPolicyTap)];
 	tapGestureRecognizerPolicy.numberOfTapsRequired = 1;

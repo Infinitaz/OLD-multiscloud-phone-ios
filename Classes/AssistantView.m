@@ -291,7 +291,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)enableWelcomeViewButtons {
-	BOOL acceptTerms = [LinphoneManager.instance lpConfigBoolForKey:@"accept_terms" withDefault:FALSE];
+	BOOL acceptTerms = [LinphoneManager.instance lpConfigBoolForKey:@"accept_terms" withDefault:TRUE];
 	UIImage *image = acceptTerms ? [UIImage imageNamed:@"checkbox_checked.png"] : [UIImage imageNamed:@"checkbox_unchecked.png"];
 	[_acceptButton setImage:image forState:UIControlStateNormal];
 	_gotoRemoteProvisioningButton.enabled = _gotoLinphoneLoginButton.enabled = _gotoCreateAccountButton.enabled = _gotoLoginButton.enabled = acceptTerms;
@@ -468,7 +468,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 	}
 	char const* creatorDomain = linphone_account_creator_get_domain(account_creator);
 	if (linphone_account_params_get_server_addr(accountParams) == NULL && creatorDomain != NULL) {
-		char *url = ms_strdup_printf("sip:%s", creatorDomain);
+		char *url = ms_strdup_printf("sip:%s", creatorDomain); // Is this the place to add .multiscloud.com:5065 ?
 		LinphoneAddress *proxy_addr = linphone_address_new(url);
 		if (proxy_addr) {
 			linphone_address_set_transport(proxy_addr, linphone_account_creator_get_transport(account_creator));
@@ -718,7 +718,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 #if DEBUG
 		UIAssistantTextField *atf =
 			(UIAssistantTextField *)[self findView:ViewElement_Domain inView:view ofType:UIAssistantTextField.class];
-		atf.text = @"test.linphone.org";
+		atf.text = @"domain"; // changed from test.linphone.org
 #endif
 	}
 	phone_number_length = 0;
@@ -1381,8 +1381,26 @@ void assistant_is_account_linked(LinphoneAccountCreator *creator, LinphoneAccoun
 
 - (IBAction)onGotoLoginClick:(id)sender {
     ONCLICKBUTTON(sender, 100, {
-        nextView = _loginView;
-        [self loadAssistantConfig:@"assistant_external_sip.rc"];
+        // TODO Check if we have an account already
+        const bctbx_list_t *accounts = linphone_core_get_account_list(LC);
+        if (bctbx_list_size(accounts) > 0) {
+            LinphoneAccount *account = (LinphoneAccount *)bctbx_list_nth_data(accounts, 0);
+            NSString *name = [NSString
+                stringWithUTF8String:linphone_address_get_username(linphone_account_params_get_identity_address(linphone_account_get_params(account)))];
+            NSString *domain = [NSString
+                stringWithUTF8String:linphone_address_get_domain(linphone_account_params_get_identity_address(linphone_account_get_params(account)))];
+            
+            nextView = _configureView;
+            [self loadAssistantConfig:@"assistant_external_sip.rc"];
+            
+            [self findTextField:ViewElement_Domain].text = domain;
+            [self findTextField:ViewElement_Username].text = name;
+            
+        } else {
+            nextView = _loginView;
+            [self loadAssistantConfig:@"assistant_external_sip.rc"];
+        }
+        
     });
 }
 
@@ -1471,13 +1489,22 @@ void assistant_is_account_linked(LinphoneAccountCreator *creator, LinphoneAccoun
 - (IBAction)onLoginClick:(id)sender {
 	ONCLICKBUTTON(sender, 100, {
 		_waitView.hidden = NO;
-		NSString *domain = [self findTextField:ViewElement_Domain].text;
+        
+        
+        
+        NSString *mc_domain = @".pbx.multiscloud.com";
+        NSString *domain = [self findTextField:ViewElement_Domain].text;
+        
+        if ([domain rangeOfString:mc_domain].location == NSNotFound) {
+            domain = [domain stringByAppendingString:mc_domain];
+        }
+        
 		NSString *username = [self findTextField:ViewElement_Username].text;
 		NSString *displayName = [self findTextField:ViewElement_DisplayName].text;
 		NSString *pwd = [self findTextField:ViewElement_Password].text;
 		LinphoneAccountParams *accountParams =  linphone_core_create_account_params(LC);
 		LinphoneAddress *addr = linphone_address_new(NULL);
-		LinphoneAddress *tmpAddr = linphone_address_new([NSString stringWithFormat:@"sip:%@",domain].UTF8String);
+		LinphoneAddress *tmpAddr = linphone_address_new([NSString stringWithFormat:@"sip:%@",domain].UTF8String); // Add domain end here I think?
 		if (tmpAddr == nil) {
 			[self displayAssistantConfigurationError];
 			return;
@@ -1511,14 +1538,17 @@ void assistant_is_account_linked(LinphoneAccountCreator *creator, LinphoneAccoun
 								   NULL,								// user id
 								   pwd.UTF8String,						// passwd
 								   NULL,								// ha1
-								   linphone_address_get_domain(addr),   // realm - assumed to be domain
-								   linphone_address_get_domain(addr)	// domain
+								   linphone_address_get_domain(tmpAddr),   // realm - assumed to be domain
+								   linphone_address_get_domain(tmpAddr)	// domain
 								   );
 		linphone_core_add_auth_info(LC, info);
 		linphone_address_unref(addr);
 		linphone_address_unref(tmpAddr);
-		
+        
+        // THE THING
+        linphone_core_clear_accounts(LC);
 		LinphoneAccount *account = linphone_core_create_account(LC, accountParams);
+        
 		linphone_account_params_unref(accountParams);
 		if (account) {
 			if (linphone_core_add_account(LC, account) != -1) {
@@ -1536,6 +1566,7 @@ void assistant_is_account_linked(LinphoneAccountCreator *creator, LinphoneAccoun
 	});
 }
 
+                 
 - (IBAction)onRemoteProvisioningLoginClick:(id)sender {
 	ONCLICKBUTTON(sender, 100, {
         _waitView.hidden = NO;
@@ -1785,3 +1816,4 @@ void assistant_is_account_linked(LinphoneAccountCreator *creator, LinphoneAccoun
 }
 
 @end
+

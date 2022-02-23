@@ -53,6 +53,7 @@
 @property(strong, nonatomic) IBOutlet UIView *remoteProvisioningView;
 @property (strong, nonatomic) IBOutlet UIView *createAccountActivateSMSView;
 @property (strong, nonatomic) IBOutlet UIView *qrCodeView;
+@property (strong, nonatomic) IBOutlet UIView *configureView;
 
 @property(nonatomic, strong) IBOutlet UIImageView *welcomeLogoImage;
 @property(nonatomic, strong) IBOutlet UIButton *gotoCreateAccountButton;

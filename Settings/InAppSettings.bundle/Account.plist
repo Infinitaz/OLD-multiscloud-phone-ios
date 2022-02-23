@@ -152,7 +152,7 @@
 			<key>AutocorrectionType</key>
 			<string>No</string>
 			<key>DefaultValue</key>
-			<string></string>
+			<string>${account_mandatory_domain_preference}:5065</string>
 			<key>IsSecure</key>
 			<false/>
 			<key>Key</key>
@@ -166,7 +166,7 @@
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string>udp</string>
+			<string>tcp</string>
 			<key>Key</key>
 			<string>account_transport_preference</string>
 			<key>Title</key>
@@ -210,7 +210,7 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>DefaultValue</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>Title</key>
@@ -226,7 +226,7 @@
 			<key>Title</key>
 			<string>AVPF</string>
 			<key>DefaultValue</key>
-			<true/>
+			<false/>
 			<key>Key</key>
 			<string>account_avpf_preference</string>
 			<key>Type</key>

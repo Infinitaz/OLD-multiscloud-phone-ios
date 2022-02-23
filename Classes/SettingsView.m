@@ -133,7 +133,7 @@
 		[((IASKSwitchEx *)cell.accessoryView) addTarget:self
 												 action:@selector(toggledValue:)
 									   forControlEvents:UIControlEventValueChanged];
-		[((IASKSwitchEx *)cell.accessoryView) setOnTintColor:LINPHONE_MAIN_COLOR];
+		[((IASKSwitchEx *)cell.accessoryView) setOnTintColor:MULTISCLOUD_MAIN_COLOR];
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		cell.textLabel.minimumScaleFactor = kIASKMinimumFontSize / [UIFont systemFontSize];
 		cell.detailTextLabel.minimumScaleFactor = kIASKMinimumFontSize / [UIFont systemFontSize];
@@ -239,13 +239,13 @@
 
 	if ([cell isKindOfClass:[IASKPSTextFieldSpecifierViewCell class]]) {
 		UITextField *field = ((IASKPSTextFieldSpecifierViewCell *)cell).textField;
-		[field setTextColor:LINPHONE_MAIN_COLOR];
+		[field setTextColor:MULTISCLOUD_MAIN_COLOR];
 	}
 
 	if ([cell isKindOfClass:[IASKPSTitleValueSpecifierViewCell class]]) {
 		cell.detailTextLabel.textColor = [UIColor grayColor];
 	} else {
-		cell.detailTextLabel.textColor = LINPHONE_MAIN_COLOR;
+		cell.detailTextLabel.textColor = MULTISCLOUD_MAIN_COLOR;
 	}
 	return cell;
 }
@@ -259,7 +259,7 @@
 @implementation UINavigationBarEx
 
 INIT_WITH_COMMON_CF {
-	[self setTintColor:[LINPHONE_MAIN_COLOR adjustHue:5.0f / 180.0f saturation:0.0f brightness:0.0f alpha:0.0f]];
+	[self setTintColor:[MULTISCLOUD_MAIN_COLOR adjustHue:5.0f / 180.0f saturation:0.0f brightness:0.0f alpha:0.0f]];
 	return self;
 }
 

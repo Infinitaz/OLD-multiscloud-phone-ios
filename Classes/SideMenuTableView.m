@@ -58,7 +58,7 @@
 	_sideMenuEntries = [[NSMutableArray alloc] init];
 
 	[_sideMenuEntries
-		addObject:[[SideMenuEntry alloc] initWithTitle:NSLocalizedString(@"Assistant", nil)
+		addObject:[[SideMenuEntry alloc] initWithTitle:NSLocalizedString(@"Configure", nil)
                                                  image:[UIImage imageNamed:@"menu_assistant.png"]
 											  tapBlock:^() {
 												[PhoneMainView.instance
@@ -84,23 +84,23 @@
 												[PhoneMainView.instance
 													changeCurrentView:SettingsView.compositeViewDescription];
 											  }]];
-    [_sideMenuEntries
-     addObject:[[SideMenuEntry alloc] initWithTitle:NSLocalizedString(@"Recordings", nil)
-                                              image:[UIImage imageNamed:@"menu_recordings.png"]
-                                           tapBlock:^() {
-                                               [PhoneMainView.instance
-                                                changeCurrentView:RecordingsListView.compositeViewDescription];
-                                           }]];
-	InAppProductsManager *iapm = LinphoneManager.instance.iapManager;
-	if (iapm.enabled){
-		[_sideMenuEntries
-			addObject:[[SideMenuEntry alloc] initWithTitle:NSLocalizedString(@"Shop", nil)
-                                                     image:nil
-												  tapBlock:^() {
-													[PhoneMainView.instance
-														changeCurrentView:ShopView.compositeViewDescription];
-												  }]];
-	}
+//    [_sideMenuEntries
+//     addObject:[[SideMenuEntry alloc] initWithTitle:NSLocalizedString(@"Recordings", nil)
+//                                              image:[UIImage imageNamed:@"menu_recordings.png"]
+//                                           tapBlock:^() {
+//                                               [PhoneMainView.instance
+//                                                changeCurrentView:RecordingsListView.compositeViewDescription];
+//                                           }]];
+//	InAppProductsManager *iapm = LinphoneManager.instance.iapManager;
+//	if (iapm.enabled){
+//		[_sideMenuEntries
+//			addObject:[[SideMenuEntry alloc] initWithTitle:NSLocalizedString(@"Shop", nil)
+//                                                     image:nil
+//												  tapBlock:^() {
+//													[PhoneMainView.instance
+//														changeCurrentView:ShopView.compositeViewDescription];
+//												  }]];
+//	}
 	[_sideMenuEntries addObject:[[SideMenuEntry alloc] initWithTitle:NSLocalizedString(@"About", nil)
                                                                image:[UIImage imageNamed:@"menu_about.png"]
 															tapBlock:^() {

@@ -3,6 +3,9 @@ platform :ios, '9.0'
 source "https://gitlab.linphone.org/BC/public/podspec.git"
 source "https://github.com/CocoaPods/Specs.git"
 
+
+
+
 def all_pods
 	if ENV['PODFILE_PATH'].nil?
 		pod 'linphone-sdk', '> 5.1.0-alpha'

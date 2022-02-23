@@ -150,14 +150,14 @@
 
 	// default values
 	{
-		[self setBool:NO forKey:@"account_pushnotification_preference"];
+		[self setBool:YES forKey:@"account_pushnotification_preference"];
 		[self setObject:@"" forKey:@"account_mandatory_username_preference"];
 		[self setObject:@"" forKey:@"account_mandatory_domain_preference"];
 		[self setCString:"" forKey:@"account_display_name_preference"];
-		[self setObject:@"" forKey:@"account_proxy_preference"];
-		[self setObject:@"udp" forKey:@"account_transport_preference"];
-		[self setBool:NO forKey:@"account_outbound_proxy_preference"];
-		[self setBool:NO forKey:@"account_avpf_preference"];
+		[self setObject:@"" forKey:@"account_proxy_preference"]; // TODO we need to set this to <domain>.pbx.multiscloud.com:5065 somewhere
+		[self setObject:@"tcp" forKey:@"account_transport_preference"];
+		[self setBool:FALSE forKey:@"account_outbound_proxy_preference"];
+		[self setBool:FALSE forKey:@"account_avpf_preference"];
 		[self setBool:YES forKey:@"account_is_default_preference"];
 		[self setBool:YES forKey:@"account_is_enabled_preference"];
 		[self setCString:"" forKey:@"account_userid_preference"];
@@ -184,7 +184,7 @@
 			const char *server_addr = linphone_account_params_get_server_addr(accountParams);
 			LinphoneAddress *proxy_addr = linphone_core_interpret_url(LC, server_addr);
 			if (identity_addr && proxy_addr) {
-				int port = linphone_address_get_port(proxy_addr);
+//				int port = linphone_address_get_port(proxy_addr);
 
 				[self setCString:linphone_address_get_username(identity_addr)
 						  forKey:@"account_mandatory_username_preference"];
@@ -192,16 +192,21 @@
 						  forKey:@"account_display_name_preference"];
 				[self setCString:linphone_address_get_domain(identity_addr)
 						  forKey:@"account_mandatory_domain_preference"];
-				if (strcmp(linphone_address_get_domain(identity_addr), linphone_address_get_domain(proxy_addr)) != 0 ||
-					port > 0) {
-					char tmp[256] = {0};
-					if (port > 0) {
-						snprintf(tmp, sizeof(tmp) - 1, "%s:%i", linphone_address_get_domain(proxy_addr), port);
-					} else
-						snprintf(tmp, sizeof(tmp) - 1, "%s", linphone_address_get_domain(proxy_addr));
-					[self setCString:tmp forKey:@"account_proxy_preference"];
-				}
-				const char *tname = "udp";
+//				if (strcmp(linphone_address_get_domain(identity_addr), linphone_address_get_domain(proxy_addr)) != 0 ||
+//					port > 0) {
+//					char tmp[256] = {0};
+//					if (port > 0) {
+//						snprintf(tmp, sizeof(tmp) - 1, "%s:%i", linphone_address_get_domain(proxy_addr), port);
+//					} else
+//						snprintf(tmp, sizeof(tmp) - 1, "%s", linphone_address_get_domain(proxy_addr));
+//					[self setCString:tmp forKey:@"account_proxy_preference"];
+//				}
+                char tmp[256] = {0};
+                
+                snprintf(tmp, sizeof(tmp) - 1, "%s:%i", linphone_address_get_domain(proxy_addr), 5065);
+                [self setCString:tmp forKey:@"account_proxy_preference"];
+                
+				const char *tname = "tcp";
 				if (linphone_address_get_secure(proxy_addr)) {
 					tname = "tls";
 				} else {
@@ -220,8 +225,10 @@
 				[self setCString:tname forKey:@"account_transport_preference"];
 			}
 
-			[self setBool:(linphone_account_params_get_routes_addresses(accountParams) != NULL) forKey:@"account_outbound_proxy_preference"];
-			[self setBool:linphone_account_is_avpf_enabled(account) forKey:@"account_avpf_preference"];
+//			[self setBool:(linphone_account_params_get_routes_addresses(accountParams) != NULL) forKey:@"account_outbound_proxy_preference"];
+            [self setBool:FALSE forKey:@"account_outbound_proxy_preference"];
+//			[self setBool:linphone_account_is_avpf_enabled(account) forKey:@"account_avpf_preference"];
+            [self setBool:FALSE forKey:@"account_avpf_preference"];
 			[self setBool:linphone_account_params_get_register_enabled(accountParams) forKey:@"account_is_enabled_preference"];
 			[self setBool:(linphone_core_get_default_account(LC) == account)
 				   forKey:@"account_is_default_preference"];
@@ -245,7 +252,8 @@
 
 			LinphoneNatPolicy *policy = linphone_account_params_get_nat_policy(accountParams);
 			if (policy) {
-				[self setBool:linphone_nat_policy_ice_enabled(policy) forKey:@"account_ice_preference"];
+//				[self setBool:linphone_nat_policy_ice_enabled(policy) forKey:@"account_ice_preference"];
+                [self setBool:FALSE forKey:@"account_ice_preference"];
 				[self setCString:linphone_nat_policy_get_stun_server(policy) forKey:@"account_stun_preference"];
 			}
 		}
